@@ -17,9 +17,7 @@ export class UsersService {
       const userAlreadyExists = await this.findByEmail(createUserDto.email);
 
       if (userAlreadyExists) {
-        throw new BadRequestException(
-          `User with email: ${createUserDto.email} already exists`,
-        );
+        throw new BadRequestException(`User already exists`);
       }
 
       const hashedPassword = await hash(password, saltOrRounds);
@@ -32,9 +30,7 @@ export class UsersService {
         },
       });
     } catch {
-      throw new BadRequestException(
-        `User with email: ${createUserDto.email} already exists`,
-      );
+      throw new BadRequestException(`User already exists`);
     }
   }
 

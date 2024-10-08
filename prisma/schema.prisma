@@ -8,21 +8,34 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String   @db.VarChar(255)
-  email     String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  changes   Changes[]
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  email     String    @unique @db.VarChar(255)
+  password  String    @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  changes   Change[]
 }
 
-model Changes {
-  id        Int      @id @default(autoincrement())
+model Document {
+  id        Int       @id @default(autoincrement())
+  title     String    @db.VarChar(255)
+  content   String    @db.Text
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
-  deletedAt DateTime?
-  content   String
-  userId    Int?
-  user      User?    @relation(fields: [userId], references: [id])
+  updatedAt DateTime  @updatedAt
+  changes   Change[]
 }
+
+model Change {
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  content     String   @db.Text
+  documentId  Int
+  document    Document @relation(fields: [documentId], references: [id])
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([documentId])
+  @@index([userId])
+}
+

@@ -33,6 +33,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
       });
+      console.log(accessToken);
 
       return {
         user: {
